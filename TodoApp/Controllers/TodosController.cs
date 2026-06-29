@@ -42,7 +42,8 @@ namespace TodoApp.Controllers
                 Title = incomingDto.Title,
                 Description = incomingDto.Description,
                 IsCompleted = false,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                Username = incomingDto.Username
             };
 
             _dbContext.TodoItems.Add(newTodoItem);
