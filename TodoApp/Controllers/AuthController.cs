@@ -23,6 +23,7 @@ namespace TodoApp.Controllers
             _configuration = configuration;
         }
 
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto request)
         {
             if (await _dbContext.Users.AnyAsync(u => u.Username == request.Username))
