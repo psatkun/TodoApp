@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Contracts;
 using TodoApp.Data;
 using TodoApp.Models;
 using TodoApp.Models.DTOs;
@@ -9,6 +9,7 @@ namespace TodoApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TodosController : ControllerBase
     {
         private readonly TodoDbContext _dbContext;
@@ -20,6 +21,13 @@ namespace TodoApp.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetAllTodos()
         {
+            var username = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized();
+            }
+
             var rawTodos = await _dbContext.TodoItems.ToListAsync();
 
             var responseData = rawTodos.Select(todo => new TodoResponseDto
@@ -36,6 +44,13 @@ namespace TodoApp.Controllers
         [HttpPost]
         public async Task<ActionResult<TodoResponseDto>> CreateTodo(CreateTodoDto incomingDto)
         {
+            var username = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized();
+            }
+
             var newTodoItem = new TodoItem
             {
                 Id = Guid.NewGuid(),
@@ -64,6 +79,13 @@ namespace TodoApp.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoResponseDto>> GetTodoById(Guid id)
         {
+            var username = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized();
+            }
+
             var todoItem = await _dbContext.TodoItems.FindAsync(id);
 
             if (todoItem == null)
@@ -85,6 +107,13 @@ namespace TodoApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodo(Guid id)
         {
+            var username = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized();
+            }
+
             var todoItem = await _dbContext.TodoItems.FindAsync(id);
 
             if (todoItem == null)
@@ -102,7 +131,14 @@ namespace TodoApp.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTodo(Guid id, UpdateTodoDto incomingDto)
         {
-            var todoItem = await _dbContext.TodoItems.FindAsync();
+            var username = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized();
+            }
+
+            var todoItem = await _dbContext.TodoItems.FindAsync(id);
 
             if (todoItem == null)
             {
