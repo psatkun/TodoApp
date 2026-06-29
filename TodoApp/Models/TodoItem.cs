@@ -10,8 +10,9 @@
         public DateTime? CompletedAt { get; set; }
 
         /// <summary>
-        /// Username (foreign key - ownership)
+        /// Foreign key --> user
         /// </summary>
-        public required string Username { get; set; }
+        public int UserId { get; set; }
+        public User? User { get; set; }
     }
 }
