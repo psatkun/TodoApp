@@ -30,6 +30,7 @@ namespace TodoApp.Controllers
                                 Id = t.Id,
                                 Title = t.Title,
                                 Description = t.Description,
+                                DueDate = t.DueDate,
                                 IsCompleted = t.IsCompleted
                             })
                             .ToListAsync();
@@ -45,6 +46,7 @@ namespace TodoApp.Controllers
                 Description = incomingDto.Description,
                 IsCompleted = false,
                 CreatedAt = DateTime.UtcNow,
+                DueDate = incomingDto.DueDate,
                 UserId = CurrentUserId
             };
 
@@ -56,6 +58,7 @@ namespace TodoApp.Controllers
                 Id = newTodoItem.Id,
                 Title = newTodoItem.Title,
                 Description = newTodoItem.Description,
+                DueDate = newTodoItem.DueDate,
                 IsCompleted = newTodoItem.IsCompleted
             };
 
@@ -78,6 +81,7 @@ namespace TodoApp.Controllers
                 Id = todoItem.Id,
                 Title = todoItem.Title,
                 Description = todoItem.Description,
+                DueDate = todoItem.DueDate,
                 IsCompleted = todoItem.IsCompleted
             };
 
@@ -114,6 +118,7 @@ namespace TodoApp.Controllers
 
             todoItem.Title = incomingDto.Title;
             todoItem.Description = incomingDto.Description;
+            todoItem.DueDate = incomingDto.DueDate;
             todoItem.IsCompleted = incomingDto.IsCompleted;
 
             await _dbContext.SaveChangesAsync();
