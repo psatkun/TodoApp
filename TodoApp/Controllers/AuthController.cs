@@ -11,6 +11,10 @@ using TodoApp.Models;
 
 namespace TodoApp.Controllers
 {
+    /// <summary>
+    /// Handles user authentication, including registration, login validation, 
+    /// and secure JWT generation.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
@@ -23,6 +27,12 @@ namespace TodoApp.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Registers a new user account after validating username uniqueness, 
+        /// storing a cryptographically salted password hash.
+        /// </summary>
+        /// <param name="request">The data containing the desired username and plaintext password.</param>
+        /// <returns>A 200 OK message on success, or a 400 Bad Request if the username is taken.</returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto request)
         {
@@ -45,6 +55,11 @@ namespace TodoApp.Controllers
             return Ok("Registration successful!");
         }
 
+        /// <summary>
+        /// Authenticates user credentials and issues a signed JWT access token.
+        /// </summary>
+        /// <param name="request">The credentials payload to verify.</param>
+        /// <returns>An authentication token payload on success, or 401 Unauthorized on credential mismatch.</returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserDto request)
         {
@@ -60,6 +75,11 @@ namespace TodoApp.Controllers
             return Ok(new AuthResponseDto(token));
         }
 
+        /// <summary>
+        /// Constructs and digitally signs a JWT containing security identifiers valid for 7 days.
+        /// </summary>
+        /// <param name="user">The verified database user entity targeting current context.</param>
+        /// <returns>A fully packed and encoded JWT token string.</returns>
         private string GenerateJwtToken(User user)
         {
             var claims = new[]
@@ -86,6 +106,9 @@ namespace TodoApp.Controllers
         }
     }
 
+    /// <summary>
+    /// Data Transfer Object representing authentication payloads.
+    /// </summary>
     public class UserDto
     {
         public required string Username { get; set; } = string.Empty;

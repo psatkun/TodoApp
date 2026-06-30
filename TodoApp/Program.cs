@@ -11,6 +11,7 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // core secret validation
         var secretKey = builder.Configuration["JwtSettings:SecretKey"];
 
         if (string.IsNullOrEmpty(secretKey) || secretKey.Length < 32)
@@ -20,7 +21,7 @@ internal class Program
 
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
-
+        // cross-origin resource sharing (CORS) policy setup
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowFrontend", policy =>
@@ -31,6 +32,7 @@ internal class Program
             });
         });
 
+        // authentication & JWT validation configuration
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -42,81 +44,67 @@ internal class Program
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = signingKey,
-                ValidateIssuer = false,      // For simple local apps, we can skip issuer/audience checks
+                ValidateIssuer = false,
                 ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero    // Instantly expires tokens when they pass expiration time
+                ClockSkew = TimeSpan.Zero
             };
         });
 
+        // core infrastructure services
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-        // Add services to the container.
-
         builder.Services.AddControllers();
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        builder.Services.AddOpenApi();
-
-        builder.Services.AddSwaggerGen(options =>
-        {
-            // 1. Define the security scheme (How the token should be passed)
-            options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Name = "Authorization",
-                Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-                Description = "Enter 'Bearer' [space] and then your valid token.\n\nExample: \"Bearer eyJhbGciOi...\""
-            });
-
-            // 2. Make Swagger use that security scheme globally
-            options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-        });
 
         builder.Services.AddDbContext<TodoDbContext>(options =>
             options.UseSqlite(connectionString));
+        
+        // Swagger API configuratino
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Enter 'Bearer' [space] and then your valid token.\n\nExample: \"Bearer eyJhbGciOi...\""
+            });
 
-
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+        });
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.MapOpenApi();
-        }
-
-        app.UseRouting();
-
-        app.UseHttpsRedirection();
-
-        app.UseCors("AllowFrontend");
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.MapControllers();
-
+        // HTTP middleware request pipeline architecture
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
+        app.UseRouting();
+        app.UseHttpsRedirection();
+        app.UseCors("AllowFrontend");
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
         app.Run();
     }
 }
