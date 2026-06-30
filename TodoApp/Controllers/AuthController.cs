@@ -57,7 +57,7 @@ namespace TodoApp.Controllers
             }
 
             var token = GenerateJwtToken(user);
-            return Ok(new { token });
+            return Ok(new AuthResponseDto(token));
         }
 
         private string GenerateJwtToken(User user)

@@ -20,6 +20,17 @@ internal class Program
 
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowFrontend", policy =>
+            {
+                policy.WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -79,6 +90,8 @@ internal class Program
         builder.Services.AddDbContext<TodoDbContext>(options =>
             options.UseSqlite(connectionString));
 
+
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -87,10 +100,13 @@ internal class Program
             app.MapOpenApi();
         }
 
+        app.UseRouting();
+
         app.UseHttpsRedirection();
 
-        app.UseAuthentication();
+        app.UseCors("AllowFrontend");
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

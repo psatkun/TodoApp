@@ -10,7 +10,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "https": {
+    "TodoApp": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
