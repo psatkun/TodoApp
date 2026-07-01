@@ -15,13 +15,16 @@ The architecture is explicitly designed around isolated data multi-tenancy, ensu
 ### Installation & Execution Steps
 
 1. Navigate to the API directory:
-   cd TodoApp
+
+   ```cd TodoApp```
 
 2. Restore NuGet dependencies:
-   dotnet restore
+
+   ```dotnet restore```
 
 3. Run the application:
-   dotnet run
+
+   ```dotnet run```
 
 The API will initialize, spin up an auto-migrating local SQLite database instance, and map the web server locally.
 * Base URL: https://localhost:7128
@@ -31,7 +34,8 @@ The API will initialize, spin up an auto-migrating local SQLite database instanc
 The testing matrix uses xUnit and an isolated EF Core In-Memory database engine to thoroughly test logic validations, identity collisions, and multi-tenant isolation rules without data bleed.
 
 To execute the test project cleanly without entry-point compilation conflicts:
-dotnet test /p:BuildingForTest=true
+
+```dotnet test /p:BuildingForTest=true```
 
 ---
 
@@ -71,12 +75,12 @@ should allow users to be logged in for longer time periods.
 
 ## What I Would Do with Another Day
 
-* If granted an extra day of development cycles, the transition to production-ready status would prioritize the following:
+If granted an extra day of development cycles, the transition to production-ready status would prioritize the following:
 
-* 1. Global exception handling: I would have Implemented a more unified, custom middleware exception layer to catch unexpected app panics. This would ensure that the API always returns a JSON payload response to the frontend client, neutralizing the danger of accidental stack-trace exposure.
-* 2. Improved logging: I would have added more logging for debugging / troubleshooting purposes
-* 3. More features related to task items -- priority, owner (other than the creator of the task)
-* 4. Cleaner, more minimalistic UI with unified color palettes
+* Global exception handling: I would have Implemented a more unified, custom middleware exception layer to catch unexpected app panics. This would ensure that the API always returns a JSON payload response to the frontend client, neutralizing the danger of accidental stack-trace exposure.
+* Improved logging: I would have added more logging for debugging / troubleshooting purposes
+* More features related to task items -- priority, owner (other than the creator of the task)
+* Cleaner, more minimalistic UI with unified color palettes
 
 ## Future Considerations for Scalability
 
