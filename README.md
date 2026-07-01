@@ -14,7 +14,7 @@ The architecture is explicitly designed around isolated data multi-tenancy, ensu
 
 ### Installation & Execution Steps
 
-1. Navigate to the API directory:
+1. Clone the repo. Navigate to the API directory:
 
    ```cd TodoApp```
 
