@@ -1,6 +1,6 @@
-# TodoApp Backend API
+# TodoApp Application
 
-This repository contains the backend RESTful API for a full-stack, secure task management application built using ASP.NET Core and Entity Framework Core. 
+This repository contains the backend RESTful API and the frontend dashboard (built in React/Vite) for a full-stack, secure task management application built using ASP.NET Core and Entity Framework Core. 
 
 The architecture is explicitly designed around isolated data multi-tenancy, ensuring rigid ownership boundaries where users can only interact with tasks they created.
 
