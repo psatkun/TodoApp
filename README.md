@@ -22,9 +22,9 @@ The architecture is explicitly designed around isolated data multi-tenancy, ensu
 
    ```dotnet restore```
 
-3. Run the application:
+3. Run the application (TodoApp profile ensures https):
 
-   ```dotnet run```
+   ```dotnet run --launch-profile TodoApp```
 
 The API will initialize, spin up an auto-migrating local SQLite database instance, and map the web server locally.
 * Base URL: https://localhost:7128
