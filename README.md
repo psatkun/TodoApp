@@ -68,6 +68,17 @@ The backend adheres to a lightweight Layered Architecture pattern, balancing dec
 
 ---
 
+## Key Assumptions & Trade-offs
+
+To keep development fast and the codebase simple, this project makes the following trade-offs based on the assumption that it is currently a low-traffic application:
+
+* Data isolation: I assume users only need to see their own tasks. Instead of setting up expensive, separate databases for every user, I use a single shared database and separate user data purely through simple code queries (`Where(x => x.UserId == currentUserId)`).
+* Database choice: I use a lightweight, local SQLite database instead of a heavy external database server (like PostgreSQL). This makes local setup instant and removes network lag, but it means the app cannot handle heavy, simultaneous database writes from thousands of users at once.
+* Authentication: I use simple, short-lived JWT tokens without a backend tracking system or refresh tokens. This keeps the backend stateless and easy to read, but it leaves session tracking entirely up to the frontend client.
+* Logging & monitoring: I assume the app will be run locally for now. I traded complex, third-party crash reporting and monitoring tools for basic, lightweight console logs to keep the app's footprint small.
+
+---
+
 ## What Was Built
 
 The application implements a full-stack task-tracking system backed by a relational database, utilizing clean controller patterns and data transfer objects (DTOs) to keep internal entities hidden from the HTTP payload space.
