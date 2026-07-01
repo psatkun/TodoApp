@@ -21,19 +21,18 @@ Because the frontend lives as a Git submodule, you need to initialize it when cl
 **If cloning for the first time:**
 ```bash
 git clone --recursive <repository-url>
-cd TodoApp
 ```
 
 **If you already cloned the repository normally (and the `todo-frontend` folder is empty):**
 ```bash
 git submodule init
 git submodule update
-cd TodoApp
 ```
 
 #### 2. Run the Backend API
 Restore NuGet dependencies and start the ASP.NET Core engine (the `TodoApp` profile ensures HTTPS):
 ```bash
+cd ./TodoApp/TodoApp
 dotnet restore
 dotnet run --launch-profile TodoApp
 ```
@@ -44,7 +43,7 @@ The API will initialize, spin up an auto-migrating local SQLite database instanc
 #### 3. Run the Frontend (Submodule)
 In a new terminal window, navigate to the frontend directory to install dependencies and spin up the client:
 ```bash
-cd todo-frontend
+cd ./TodoApp/todo-frontend
 npm install
 npm start # or 'npm run dev' depending on your frontend framework
 ```
