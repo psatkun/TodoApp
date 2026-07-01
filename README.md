@@ -10,25 +10,44 @@ The architecture is explicitly designed around isolated data multi-tenancy, ensu
 
 ### Prerequisites
 * .NET 9.0 SDK
+* Node.js (v18.0.0 or higher recommended) & npm (for running the frontend submodule)
 * A command-line terminal (Bash, Zsh, or PowerShell)
 
 ### Installation & Execution Steps
 
-1. Clone the repo. Navigate to the API directory:
+#### 1. Clone the Repository & Fetch Submodules
+Because the frontend lives as a Git submodule, you need to initialize it when cloning.
 
-   ```cd TodoApp```
+**If cloning for the first time:**
+```bash
+git clone --recursive <repository-url>
+cd TodoApp
+```
 
-2. Restore NuGet dependencies:
+**If you already cloned the repository normally (and the `todo-frontend` folder is empty):**
+```bash
+git submodule init
+git submodule update
+cd TodoApp
+```
 
-   ```dotnet restore```
+#### 2. Run the Backend API
+Restore NuGet dependencies and start the ASP.NET Core engine (the `TodoApp` profile ensures HTTPS):
+```bash
+dotnet restore
+dotnet run --launch-profile TodoApp
+```
+The API will initialize, spin up an auto-migrating local SQLite database instance, and map the web server locally:
+* **Base URL:** `https://localhost:7128`
+* **Swagger Documentation:** `https://localhost:7128/swagger`
 
-3. Run the application (TodoApp profile ensures https):
-
-   ```dotnet run --launch-profile TodoApp```
-
-The API will initialize, spin up an auto-migrating local SQLite database instance, and map the web server locally.
-* Base URL: https://localhost:7128
-* Swagger Documentation: https://localhost:7128/swagger
+#### 3. Run the Frontend (Submodule)
+In a new terminal window, navigate to the frontend directory to install dependencies and spin up the client:
+```bash
+cd todo-frontend
+npm install
+npm start # or 'npm run dev' depending on your frontend framework
+```
 
 ### Running the Unit Test Suite
 The testing matrix uses xUnit and an isolated EF Core In-Memory database engine to thoroughly test logic validations, identity collisions, and multi-tenant isolation rules without data bleed.
