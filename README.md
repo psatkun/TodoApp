@@ -35,7 +35,7 @@ The testing matrix uses xUnit and an isolated EF Core In-Memory database engine 
 
 To execute the test project cleanly without entry-point compilation conflicts:
 
-```dotnet test /p:BuildingForTest=true```
+```dotnet test -p:BuildingForTest=true```
 
 ---
 
