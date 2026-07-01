@@ -81,6 +81,7 @@ If granted an extra day of development cycles, the transition to production-read
 * Improved logging: I would have added more logging for debugging / troubleshooting purposes
 * More features related to task items -- priority, owner (other than the creator of the task)
 * Cleaner, more minimalistic UI with unified color palettes
+* Stricter requirements for username / password creation (e.g. at least 1 upper case, special characters, minimum length)
 
 ## Future Considerations for Scalability
 
