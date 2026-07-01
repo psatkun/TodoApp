@@ -45,7 +45,7 @@ In a new terminal window, navigate to the frontend directory to install dependen
 ```bash
 cd ./TodoApp/todo-frontend
 npm install
-npm start # or 'npm run dev' depending on your frontend framework
+npm run dev
 ```
 
 ### Running the Unit Test Suite
