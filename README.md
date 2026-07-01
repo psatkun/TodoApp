@@ -14,7 +14,7 @@ The architecture is explicitly designed around isolated data multi-tenancy, ensu
 
 ### Installation & Execution Steps
 
-1. Navigate to the API directory:
+1. Clone the repo. Navigate to the API directory:
 
    ```cd TodoApp```
 
@@ -22,9 +22,9 @@ The architecture is explicitly designed around isolated data multi-tenancy, ensu
 
    ```dotnet restore```
 
-3. Run the application:
+3. Run the application (TodoApp profile ensures https):
 
-   ```dotnet run```
+   ```dotnet run --launch-profile TodoApp```
 
 The API will initialize, spin up an auto-migrating local SQLite database instance, and map the web server locally.
 * Base URL: https://localhost:7128
@@ -35,7 +35,7 @@ The testing matrix uses xUnit and an isolated EF Core In-Memory database engine 
 
 To execute the test project cleanly without entry-point compilation conflicts:
 
-```dotnet test /p:BuildingForTest=true```
+```dotnet test -p:BuildingForTest=true```
 
 ---
 
@@ -81,6 +81,7 @@ If granted an extra day of development cycles, the transition to production-read
 * Improved logging: I would have added more logging for debugging / troubleshooting purposes
 * More features related to task items -- priority, owner (other than the creator of the task)
 * Cleaner, more minimalistic UI with unified color palettes
+* Stricter requirements for username / password creation (e.g. at least 1 upper case, special characters, minimum length)
 
 ## Future Considerations for Scalability
 
