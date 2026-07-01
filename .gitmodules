@@ -1,0 +1,3 @@
+[submodule "todo-frontend"]
+	path = todo-frontend
+	url = https://github.com/psatkun/todo-frontend.git
